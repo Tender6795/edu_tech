@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IAuth, IUser } from "@/app/interfaces/interfaces";
-import { currentUser, login, register, updateUser } from "@/app/api";
+import { currentUser, login, register, updateUser, getSkills } from "@/app/api";
 import { sliceHelper } from "./sliceHelper";
 
 interface ICurrentUserState {
@@ -21,6 +21,15 @@ export const fetchCurrentUser = createAsyncThunk("currentUser", async () => {
   try {
     const user = await currentUser();
     return user;
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const fetchSkills = createAsyncThunk("skills", async () => {
+  try {
+    const skills = await getSkills();
+    return skills;
   } catch (error) {
     throw error;
   }
@@ -65,6 +74,8 @@ const currentUserSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.user = null;
+      //@ts-ignore
+      state.skills = [],
       localStorage.setItem("token", "");
     },
   },
@@ -74,7 +85,7 @@ const currentUserSlice = createSlice({
       (state: any, action: any) => {
         state.loading = false;
         state.user = action.payload as IUser;
-      }
+      },
     );
     sliceHelper(builder, fetchLogin).addCase(
       fetchLogin.fulfilled,
@@ -99,6 +110,9 @@ const currentUserSlice = createSlice({
     );
   },
 });
+
+
+
 
 export const { logout } = currentUserSlice.actions;
 

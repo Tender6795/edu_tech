@@ -46,7 +46,7 @@ export default async function MySkills() {
 
   return (
     <div className='container p-3'>
-      <h1 className='text-3xl font-semibold leading-loose mb-8'>Skills</h1>
+      <h1 className='text-3xl font-semibold leading-loose mb-8'>Skills2</h1>
       <div className='grid grid-flow-row gap-5 max-w-xl'>
         <h2 className='label-text select-none underline text-lg'>My current skills list:</h2>
         <CurrentSkills skills={userSkills} />

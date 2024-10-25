@@ -2,6 +2,7 @@ export type AccountFormValues = {
   firstName: string | null;
   lastName: string | null;
   avatar_url: string | null;
+  skillIds?: string[]
 };
 
 export type AlertProps = {

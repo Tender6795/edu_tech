@@ -18,6 +18,7 @@ interface Worker {
   firstName: string;
   lastName: string;
   roles: string[];
+  skills: any;
 }
 
 export default function UserDetails({ params }: UserDetailsProps) {
@@ -87,12 +88,23 @@ export default function UserDetails({ params }: UserDetailsProps) {
           <p className="text-gray-600">{worker.email}</p>
           <div className="mt-2">
             {worker.roles.map((role) => (
-              <span
-                key={role}
-                className="inline-block bg-primary text-black text-xs font-semibold px-2 py-1 rounded-full mr-2"
-              >
-                {role}
-              </span>
+              <div key={role}>
+                <div className="flex justify-center">
+                  <span className="inline-block bg-primary text-black text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                    {role}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 justify-center mt-2">
+                  {worker?.skills?.map((skill:any) => (
+                    <div
+                      key={skill.id}
+                      className="bg-[#FF9B73] text-black text-xs font-semibold px-2 py-1 rounded-full flex justify-center"
+                    >
+                      {skill?.skill.title + " " + skill?.skill.level}
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

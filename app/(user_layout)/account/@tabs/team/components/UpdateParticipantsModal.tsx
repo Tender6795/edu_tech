@@ -139,22 +139,30 @@ console.log('filteredWorkers', filteredWorkers)
                   <div
                     key={worker.id}
                     className="flex flex-col items-center gap-2 mb-4 cursor-pointer"
-                    onClick={() => {
-                      console.log('worker', worker)
-                      router.push(`/user/${worker?.id}`);
-
-                    }}
+             
                   >
-                    <Image
+                    <div
+                    className="flex flex-col items-center"
+                           onClick={() => {
+                            console.log('worker', worker)
+                            router.push(`/user/${worker?.id}`);
+      
+                          }}
+                    >
+    <Image
                       src={worker?.avatarUrl ? getFullUrl(worker?.avatarUrl) : "https://www.w3schools.com/howto/img_avatar.png"}
                       alt="avatar"
                       width={60}
                       height={60}
+               
                       className="w-[60px] h-[60px] rounded-full object-cover"
                     />
                     <span className="text-gray-800 text-center">
                       {worker.firstName} {worker.lastName}
                     </span>
+
+                    </div>
+                
                     <label className="inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
