@@ -105,17 +105,43 @@ export default memo(function AccountForm() {
     const getSkills = async () => {
       const { payload } = await dispatch(fetchSkills());
       if (payload) {
-        const skillOptions = payload?.map(
+        const skillOptions = payload.map(
           (skill: { id: string; title: string }) => ({
             value: skill.id,
-            label: skill.title,
+            label: skill.title + " " + skill.level,
           })
         );
+
         setSkills(skillOptions);
+
+        if (user) {
+          console.log("user.skills:", user.skills);
+          console.log("payload:", payload);
+
+          // Знайти скіли, які збігаються з скілами користувача
+          const filteredUserSkills = user.skills
+            .map((userSkill) => {
+              const matchedSkill = payload.find(
+                (skill) => userSkill.skillId === skill.id
+              );
+              return matchedSkill
+                ? {
+                    value: matchedSkill.id,
+                    label: matchedSkill.title,
+                  }
+                : null;
+            })
+            .filter((skill) => skill !== null); // Фільтруємо null значення
+
+          console.log("Filtered user skills:", filteredUserSkills);
+
+          // Оновити currentSkills
+          setCurrentSkills(filteredUserSkills);
+        }
       }
     };
     getSkills();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (user) {
@@ -162,6 +188,9 @@ export default memo(function AccountForm() {
   ) => {
     const selectedValues = newValue.map((option) => option.value);
     setSelectedSkills(selectedValues);
+
+    // Оновлення currentSkills для відображення у селекті
+    setCurrentSkills(newValue);
   };
   const updateProfileHandle: SubmitHandler<FormValues> = async ({
     firstName,
@@ -174,12 +203,12 @@ export default memo(function AccountForm() {
       formData.append("lastName", lastName || "");
       if (selectedSkills && selectedSkills.length > 0) {
         selectedSkills.forEach((skillId) => {
-          formData.append("skillIds", skillId); 
+          formData.append("skillIds", skillId);
         });
       }
 
       formData.append("skillIds", JSON.stringify(selectedSkills));
-      
+
       if (bufferImage) {
         const resized = await resizeImage(bufferImage, 300, 300);
         formData.append("avatar", resized, "avatar.jpg");
@@ -187,12 +216,17 @@ export default memo(function AccountForm() {
       console.log(Array.from(formData.entries()));
 
       // Формуємо об'єкт з даними з FormData
-const payload: { firstName: string; lastName: string; avatar: File | null, skillIds: any } = {
-  firstName: formData.get("firstName") as string,
-  lastName: formData.get("lastName") as string,
-  avatar: formData.get("avatar") as File | null,
-  skillIds: selectedSkills
-};
+      const payload: {
+        firstName: string;
+        lastName: string;
+        avatar: File | null;
+        skillIds: any;
+      } = {
+        firstName: formData.get("firstName") as string,
+        lastName: formData.get("lastName") as string,
+        avatar: formData.get("avatar") as File | null,
+        skillIds: selectedSkills,
+      };
 
       await dispatch(fetchUpdate(payload));
 
@@ -258,7 +292,7 @@ const payload: { firstName: string; lastName: string; avatar: File | null, skill
                 id="skillIds"
                 isMulti
                 options={skills}
-           
+                value={currentSkills}
                 onChange={onSkillsChange}
                 styles={customStylesSelect}
                 classNamePrefix="select"
