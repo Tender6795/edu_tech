@@ -24,6 +24,10 @@ jobs:
         run: |
           git remote add my-origin git@github.com:Tender6795/edu_tech.git
 
-      - name: Push to my-origin dev
+      - name: Fetch my-origin
+        run: |
+          git fetch my-origin
+
+      - name: Force Push to my-origin dev
         run: |
           git push my-origin dev:dev --force
