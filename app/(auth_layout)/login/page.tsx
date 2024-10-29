@@ -40,7 +40,7 @@ export default function Login() {
   return (
     <FormCard>
       <form className="grid grid-flow-row gap-8" onSubmit={formik.handleSubmit}>
-        <h2 className="text-3xl font-semibold text-center mb-2">Login autodeploy test2</h2>
+        <h2 className="text-3xl font-semibold text-center mb-2">Login autodeploy test3</h2>
         <Input
           id="email"
           name="email"
