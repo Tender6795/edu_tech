@@ -1,0 +1,29 @@
+name: build-deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: github.com
+
+      - name: Add my-origin remote
+        run: |
+          git remote add my-origin git@github.com:Tender6795/edu_tech.git
+
+      - name: Push to my-origin dev
+        run: |
+          git push my-origin dev:dev --force
