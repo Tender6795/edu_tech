@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
 
     steps:
       - name: Checkout code
@@ -22,11 +21,7 @@ jobs:
 
       - name: Add my-origin remote
         run: |
-          git remote add my-origin git@github.com:Tender6795/edu_tech.git
-
-      - name: Fetch my-origin
-        run: |
-          git fetch my-origin
+          git remote add my-origin git@github.com:Tender6795/edu_tech.git || echo "my-origin already exists"
 
       - name: Force Push to my-origin dev
         run: |
