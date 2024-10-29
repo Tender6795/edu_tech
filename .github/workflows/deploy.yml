@@ -25,4 +25,5 @@ jobs:
 
       - name: Force Push to my-origin dev
         run: |
+          git push my-origin --delete dev || echo "Branch dev not found on my-origin"
           git push my-origin dev:dev --force
